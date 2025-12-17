@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "HashiCorp.terraform",
+    "XargsUK.checkov-prismaless",
+    "tfsec.tfsec",
+    "eamodio.gitlens",
+    "donjayamanne.githistory",
+    "redhat.vscode-yaml",
+    "ms-vscode-remote.remote-containers"
+  ]
+}
