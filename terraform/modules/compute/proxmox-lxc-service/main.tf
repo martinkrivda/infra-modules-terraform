@@ -1,25 +1,51 @@
-resource "proxmox_lxc" "this" {
-  hostname    = var.hostname
-  vmid        = var.vmid
-  target_node = var.target_node
-
-  ostemplate = var.ostemplate         # např. "iso-store:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
-
-  cores  = var.cores
-  memory = var.memory_mb
-
-  rootfs {
-    storage = var.rootfs_storage
-    size    = "${var.rootfs_size_gb}G"
+terraform {
+  required_version = ">= 1.5.0"
+  required_providers {
+    proxmox = {
+      source  = "Telmate/proxmox"
+      version = ">= 2.9.0"
+    }
   }
+}
 
-  net0 = "name=eth0,bridge=${var.bridge},ip=${var.ip_cidr},gw=${var.gateway}"
+locals {
+  labels = merge({
+    environment = var.environment,
+    component   = var.service_name,
+    managed_by  = "terraform",
+  }, var.extra_labels)
 
-  password = var.root_password
+  tags = distinct(compact(concat(var.tags, [for k, v in local.labels : format("%s=%s", k, v)])))
+}
 
+resource "proxmox_lxc" "service" {
+  target_node     = var.target_node
+  hostname        = var.service_name
+  ostemplate      = var.template
+  password        = var.credentials.password
+  ssh_public_keys = join("\n", var.credentials.ssh_public_keys)
+  cores           = var.cores
+  memory          = var.memory_mb
+  swap            = var.swap_mb
+  onboot          = true
+  start           = true
+  unprivileged    = var.unprivileged
+  tags            = join(";", local.tags)
   features {
-    nesting = var.nesting
+    nesting = true
+    fuse    = true
   }
-
-  onboot = true
+  rootfs {
+    storage = var.rootfs.storage
+    size    = var.rootfs.size_gb
+  }
+  network {
+    name   = "eth0"
+    bridge = var.network.bridge
+    ip     = var.network.ipv4_cidr
+    gw     = var.network.gateway_ipv4
+  }
+  lifecycle {
+    ignore_changes = [rootfs]
+  }
 }

@@ -1,7 +1,9 @@
 output "hostname" {
-  value = proxmox_lxc.this.hostname
+  description = "Hostname of the LXC service."
+  value       = proxmox_lxc.service.hostname
 }
 
-output "ipv4" {
-  value = var.ip_cidr
+output "labels" {
+  description = "Label map applied to metadata."
+  value       = local.labels
 }

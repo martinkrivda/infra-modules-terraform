@@ -1,0 +1,20 @@
+# Normalize line endings
+* text=auto eol=lf
+
+# Treat Terraform/HCL files as text and enable syntax-aware diffs on GitHub
+*.tf        text diff=terraform linguist-language=HCL
+*.tfvars    text diff=terraform linguist-language=HCL
+*.tf.json   text diff=terraform linguist-language=HCL
+
+# Keep shell scripts executable and normalized
+*.sh        text eol=lf
+
+# Markdown, YAML, and JSON should always be LF
+*.md        text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.json      text eol=lf
+
+# Prevent Terraform state or plan files from being treated as binary diffs
+*.tfstate   binary
+*.tfplan    binary
