@@ -25,9 +25,21 @@ variable "target_node" {
   description = "Name of the Proxmox node where the VM will run."
 }
 
+variable "pool" {
+  type        = string
+  description = "Optional Proxmox resource pool that should contain the VM."
+  default     = null
+}
+
 variable "template" {
   type        = string
   description = "Existing Proxmox template to clone (cloud-init ready)."
+}
+
+variable "template_vmid" {
+  type        = number
+  description = "Numeric VMID of the template to clone instead of referencing by name."
+  default     = null
 }
 
 variable "full_clone" {
@@ -106,6 +118,30 @@ variable "cloud_init" {
   }
 }
 
+variable "ssh_public_keys" {
+  description = "Optional override for SSH public keys injected via cloud-init."
+  type        = list(string)
+  default     = null
+}
+
+variable "cpu_cores" {
+  description = "Optional override for number of cores per socket."
+  type        = number
+  default     = null
+}
+
+variable "cpu_sockets" {
+  description = "Optional override for number of CPU sockets."
+  type        = number
+  default     = null
+}
+
+variable "memory_override_mb" {
+  description = "Optional override for memory in MB (falls back to memory_mb when unset)."
+  type        = number
+  default     = null
+}
+
 variable "disks" {
   description = "Disk definitions. slot refers to the disk device number (e.g. 0 for scsi0)."
   type = list(object({
@@ -127,6 +163,35 @@ variable "disks" {
   ]
 }
 
+variable "os_disk" {
+  description = "Optional simplified definition for the OS disk; overrides the first entry in disks."
+  type = object({
+    size_gb = number
+    storage = string
+    type    = optional(string, "scsi")
+    slot    = optional(number)
+    ssd     = optional(bool, true)
+    cache   = optional(string, "writeback")
+    backup  = optional(bool, true)
+  })
+  default  = null
+  nullable = true
+}
+
+variable "data_disks" {
+  description = "Optional list of simplified data disks appended after the OS disk."
+  type = list(object({
+    size_gb = number
+    storage = string
+    type    = optional(string, "scsi")
+    slot    = optional(number)
+    ssd     = optional(bool, true)
+    cache   = optional(string, "writeback")
+    backup  = optional(bool, true)
+  }))
+  default = []
+}
+
 variable "network" {
   description = "Primary network interface config."
   type = object({
@@ -142,4 +207,22 @@ variable "network" {
     bridge    = "vmbr0"
     ipv4_cidr = null
   }
+}
+
+variable "ipv4_address" {
+  description = "Optional plain IPv4 address that will be combined with ipv4_prefix_length."
+  type        = string
+  default     = null
+}
+
+variable "ipv4_prefix_length" {
+  description = "Optional prefix length for ipv4_address (defaults to /32 when omitted)."
+  type        = number
+  default     = null
+}
+
+variable "ipv4_gateway" {
+  description = "Optional IPv4 gateway override when ipv4_address is specified."
+  type        = string
+  default     = null
 }

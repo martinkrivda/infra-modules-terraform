@@ -13,6 +13,7 @@ module "k3s_server" {
   role        = "k3s-control-plane"
   target_node = "pve01"
   template    = "debian-12-cloudinit"
+  pool        = "lab-platform"
 
   cpu = {
     sockets = 1
@@ -24,7 +25,7 @@ module "k3s_server" {
 
   disks = [{
     type    = "scsi"
-    storage = "nvme"
+    storage = "vm-data"
     size_gb = 40
     slot    = 0
   }]
@@ -42,6 +43,39 @@ module "k3s_server" {
   }
 
   tags = ["k3s", "control-plane"]
+}
+```
+
+### Convenience overrides
+
+The module keeps the original `cpu`, `memory_mb`, `disks`, `network`, and `cloud_init` inputs for backward compatibility while exposing optional knobs for common day-to-day tweaks. Use any combination of the following to configure pool membership, template VMID, SSH keys, networking, and storage layouts without redefining the full structures:
+
+```hcl
+module "k3s_server" {
+  # ...
+  pool          = "lab-platform"
+  template_vmid = 9000
+
+  ssh_public_keys = [file("~/.ssh/id_ed25519.pub")]
+
+  ipv4_address       = "10.42.0.10"
+  ipv4_prefix_length = 24
+  ipv4_gateway       = "10.42.0.1"
+
+  cpu_cores          = 4
+  cpu_sockets        = 1
+  memory_override_mb = 6144
+
+  os_disk = {
+    storage = "vm-data"
+    size_gb = 60
+  }
+
+  data_disks = [{
+    storage = "vm-data"
+    size_gb = 150
+    slot    = 1
+  }]
 }
 ```
 
