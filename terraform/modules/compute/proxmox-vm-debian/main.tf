@@ -74,7 +74,7 @@ locals {
   base_disks = length(local.os_disk_override) > 0 ? local.os_disk_override : var.disks
 
   base_disk_slots = [for disk in local.base_disks : disk.slot]
-  next_disk_slot  = length(local.base_disk_slots) == 0 ? 0 : max(local.base_disk_slots) + 1
+  next_disk_slot  = length(local.base_disk_slots) == 0 ? 0 : max(local.base_disk_slots...) + 1
 
   data_disk_overrides = [
     for idx, disk in var.data_disks : merge(
