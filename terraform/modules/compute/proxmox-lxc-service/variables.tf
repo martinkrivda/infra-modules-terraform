@@ -49,7 +49,7 @@ variable "rootfs" {
     size_gb = number
   })
   default = {
-    storage = "local-lvm"
+    storage = "lxc-data"
     size_gb = 10
   }
 }

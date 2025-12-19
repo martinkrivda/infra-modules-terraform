@@ -54,7 +54,7 @@ variable "k3s_server" {
     memory_mb = 4096
     disks = [{
       type    = "scsi"
-      storage = "local-lvm"
+      storage = "vm-data"
       size_gb = 40
       slot    = 0
     }]
@@ -94,7 +94,7 @@ variable "k3s_worker" {
     memory_mb = 8192
     disks = [{
       type    = "scsi"
-      storage = "local-lvm"
+      storage = "vm-data"
       size_gb = 80
       slot    = 0
     }]

@@ -83,7 +83,7 @@ variable "memory_mb" {
 variable "cloudinit_storage" {
   type        = string
   description = "Datastore that holds the cloud-init ISO (usually same as template storage)."
-  default     = "local-lvm"
+  default     = "vm-data"
 }
 
 variable "cloudinit_disk_slot" {
@@ -162,7 +162,7 @@ variable "disks" {
   default = [
     {
       type    = "scsi"
-      storage = "local-lvm"
+      storage = "vm-data"
       size_gb = 40
       slot    = 0
     }
