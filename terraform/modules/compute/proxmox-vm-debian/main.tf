@@ -107,15 +107,20 @@ resource "proxmox_vm_qemu" "vm" {
   boot                    = var.boot_order
   bootdisk                = var.bootdisk
   scsihw                  = var.scsihw
-  sockets                 = local.cpu.sockets
-  cores                   = local.cpu.cores
-  cpu                     = local.cpu.model
+  cpu {
+    cores    = local.cpu.cores
+    sockets  = local.cpu.sockets
+    cpu_type = local.cpu.model
+  }
   memory                  = local.memory_mb
   agent                   = 1
   qemu_os                 = "l26"
   tags                    = join(";", local.tags)
   os_type                 = "cloud-init"
-  cloudinit_cdrom_storage = var.cloudinit_storage
+  disk {
+    type    = "cloudinit"
+    storage = var.cloudinit_storage
+  }
   kvm                     = true
   pool                    = var.pool
 
@@ -131,7 +136,6 @@ resource "proxmox_vm_qemu" "vm" {
       storage = disk.value.storage
       size    = disk.value.size_gb
       slot    = disk.value.slot
-      ssd     = disk.value.ssd
       cache   = disk.value.cache
       backup  = disk.value.backup
     }
@@ -140,6 +144,7 @@ resource "proxmox_vm_qemu" "vm" {
   dynamic "network" {
     for_each = [var.network]
     content {
+      id       = 0
       model    = network.value.model
       bridge   = network.value.bridge
       firewall = network.value.firewall
