@@ -21,10 +21,13 @@ locals {
       concat(
         var.tags,
         [
-          for k, v in local.merged_labels : regexreplace(
-            regexreplace(format("%s-%s", k, v), "[^0-9A-Za-z._-]", "-"),
-            "^[-.]+",
-            ""
+          for k, v in local.merged_labels : trim(
+            replace(
+              replace(format("%s-%s", k, v), "=", "-"),
+              " ",
+              "-"
+            ),
+            "-."
           )
         ]
       )
