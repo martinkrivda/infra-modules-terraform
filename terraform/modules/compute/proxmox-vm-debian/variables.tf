@@ -87,9 +87,9 @@ variable "cloudinit_storage" {
 }
 
 variable "cloudinit_disk_slot" {
-  type        = number
-  description = "Slot index reserved for the cloud-init drive."
-  default     = 2
+  type        = string
+  description = "Slot identifier reserved for the cloud-init drive (e.g. ide2)."
+  default     = "ide2"
 }
 
 variable "boot_order" {

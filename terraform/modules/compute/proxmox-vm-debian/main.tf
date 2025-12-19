@@ -20,7 +20,13 @@ locals {
     compact(
       concat(
         var.tags,
-        [for k, v in local.merged_labels : format("%s=%s", k, v)]
+        [
+          for k, v in local.merged_labels : regexreplace(
+            regexreplace(format("%s-%s", k, v), "[^0-9A-Za-z._-]", "-"),
+            "^[-.]+",
+            ""
+          )
+        ]
       )
     )
   )
@@ -100,7 +106,7 @@ locals {
 resource "proxmox_vm_qemu" "vm" {
   name               = var.name
   target_node        = var.target_node
-  desc               = var.description
+  description        = var.description
   clone              = local.clone_source
   full_clone         = var.full_clone
   start_at_node_boot = true
@@ -133,10 +139,10 @@ resource "proxmox_vm_qemu" "vm" {
   dynamic "disk" {
     for_each = local.disks
     content {
-      type    = disk.value.type
+      type    = "disk"
       storage = disk.value.storage
       size    = disk.value.size_gb
-      slot    = disk.value.slot
+      slot    = format("%s%s", disk.value.type, disk.value.slot)
       cache   = disk.value.cache
       backup  = disk.value.backup
     }
