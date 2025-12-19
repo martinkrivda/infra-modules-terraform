@@ -86,6 +86,12 @@ variable "cloudinit_storage" {
   default     = "local-lvm"
 }
 
+variable "cloudinit_disk_slot" {
+  type        = number
+  description = "Slot index reserved for the cloud-init drive."
+  default     = 2
+}
+
 variable "boot_order" {
   type        = string
   description = "Boot order string passed to Proxmox (e.g. order=scsi0;ide2;net0)."

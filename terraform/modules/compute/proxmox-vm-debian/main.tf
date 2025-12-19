@@ -98,31 +98,32 @@ locals {
 }
 
 resource "proxmox_vm_qemu" "vm" {
-  name                    = var.name
-  target_node             = var.target_node
-  desc                    = var.description
-  clone                   = local.clone_source
-  full_clone              = var.full_clone
-  onboot                  = true
-  boot                    = var.boot_order
-  bootdisk                = var.bootdisk
-  scsihw                  = var.scsihw
+  name               = var.name
+  target_node        = var.target_node
+  desc               = var.description
+  clone              = local.clone_source
+  full_clone         = var.full_clone
+  start_at_node_boot = true
+  boot               = var.boot_order
+  bootdisk           = var.bootdisk
+  scsihw             = var.scsihw
   cpu {
-    cores    = local.cpu.cores
-    sockets  = local.cpu.sockets
-    cpu_type = local.cpu.model
+    cores   = local.cpu.cores
+    sockets = local.cpu.sockets
+    type    = local.cpu.model
   }
-  memory                  = local.memory_mb
-  agent                   = 1
-  qemu_os                 = "l26"
-  tags                    = join(";", local.tags)
-  os_type                 = "cloud-init"
+  memory  = local.memory_mb
+  agent   = 1
+  qemu_os = "l26"
+  tags    = join(";", local.tags)
+  os_type = "cloud-init"
   disk {
     type    = "cloudinit"
     storage = var.cloudinit_storage
+    slot    = var.cloudinit_disk_slot
   }
-  kvm                     = true
-  pool                    = var.pool
+  kvm  = true
+  pool = var.pool
 
   sshkeys    = join("\n", local.ssh_public_keys)
   ciuser     = var.cloud_init.user

@@ -19,18 +19,18 @@ locals {
 }
 
 resource "proxmox_lxc" "service" {
-  target_node     = var.target_node
-  hostname        = var.service_name
-  ostemplate      = var.template
-  password        = var.credentials.password
-  ssh_public_keys = join("\n", var.credentials.ssh_public_keys)
-  cores           = var.cores
-  memory          = var.memory_mb
-  swap            = var.swap_mb
-  onboot          = true
-  start           = true
-  unprivileged    = var.unprivileged
-  tags            = join(";", local.tags)
+  target_node        = var.target_node
+  hostname           = var.service_name
+  ostemplate         = var.template
+  password           = var.credentials.password
+  ssh_public_keys    = join("\n", var.credentials.ssh_public_keys)
+  cores              = var.cores
+  memory             = var.memory_mb
+  swap               = var.swap_mb
+  start_at_node_boot = true
+  start              = true
+  unprivileged       = var.unprivileged
+  tags               = join(";", local.tags)
   features {
     nesting = true
     fuse    = true
