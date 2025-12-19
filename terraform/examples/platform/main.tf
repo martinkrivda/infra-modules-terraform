@@ -3,7 +3,7 @@ terraform {
   required_providers {
     proxmox = {
       source  = "Telmate/proxmox"
-      version = ">= 3.0.2-rc07"
+      version = ">= 2.9.14"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
