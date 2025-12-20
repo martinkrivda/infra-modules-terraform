@@ -138,6 +138,7 @@ resource "proxmox_vm_qemu" "vm" {
   ciuser     = var.cloud_init.user
   cipassword = var.cloud_init.password
   ipconfig0  = local.ipconfig0
+  cicustom   = var.cicustom
 
   dynamic "disk" {
     for_each = local.disks

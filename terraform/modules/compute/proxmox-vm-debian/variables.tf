@@ -92,6 +92,12 @@ variable "cloudinit_disk_slot" {
   default     = "ide2"
 }
 
+variable "cicustom" {
+  type        = string
+  description = "Optional cloud-init custom config (e.g. user=storage:snippets/user.yaml)."
+  default     = null
+}
+
 variable "boot_order" {
   type        = string
   description = "Boot order string passed to Proxmox (e.g. order=scsi0;ide2;net0)."
