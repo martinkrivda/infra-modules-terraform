@@ -16,6 +16,7 @@ Reusable Terraform modules for building a minimalist self-hosted platform on top
 terraform/
   modules/
     compute/         # Proxmox & DigitalOcean compute blueprints
+    db/              # MariaDB / MySQL database modules
     dns/             # Cloudflare DNS record orchestration
     k8s/             # Helm / Kubernetes resources (Argo CD, Vault, Keycloak, namespaces, bootstrap)
     idp/             # Identity provider configuration (Keycloak realms/clients)
@@ -32,6 +33,8 @@ Supporting files in the repo root (`Makefile`, `.tflint.hcl`, `.pre-commit-confi
 | Compute  | `compute/proxmox-vm-debian` | Creates a Debian-based VM from a Proxmox template with cloud-init, disks, networking, and tagging conventions. |
 |          | `compute/proxmox-lxc-service` | Builds k3s-friendly LXC containers for auxiliary services (registries, CI helpers, etc.). |
 |          | `compute/do-droplet-debian` | Opinionated DigitalOcean Debian droplet for off-site workloads or worker expansion. |
+| Database | `db/mariadb-app` | Creates MariaDB databases/users, grants, and stores credentials in Vault KV v2 (MySQL provider). |
+|          | `db/postgres-app` | Creates PostgreSQL databases/users, grants, and stores credentials in Vault KV v2. |
 | DNS      | `dns/cloudflare-records` | Manages individual records and record sets (A, AAAA, CNAME, TXT, wildcard) via Cloudflare. |
 | K8s      | `k8s/namespace` | Creates consistent namespaces with labels/quotas. |
 |          | `k8s/argocd-helm` | Installs Argo CD via Helm with bootstrap projects and repositories. |
@@ -107,4 +110,3 @@ Each module includes its own README with usage, inputs, outputs, and examples.
 5. **Observability** – Modules encourage adding Umami + Uptime Kuma via Argo CD projects with sealed secrets / Vault injectors.
 
 Use this repository as the foundation. Create per-environment repos that pin module versions, pass actual values, and supply backend configuration.
-
