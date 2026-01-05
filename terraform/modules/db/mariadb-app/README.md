@@ -27,4 +27,12 @@ Vault storage:
 - App user secret path: `${vault_app_secret_prefix}/users/${app_user_name}`
 - Admin secret path: `${vault_admin_secret_prefix}/admins/<admin_user>`
 
+Shared admin credentials:
+- Override `vault_admin_secret_prefix` (for example `kobchocen/shared`) and create the admin user only once (e.g. in `prod`).
+- This stores the admin secret at `apps/kobchocen/shared/admins/<admin_user>`.
+
+Existing admin users:
+- Use `existing_admin_users` to apply grants without creating the user.
+- Useful when you want the same admin across multiple databases without re-creating the account.
+
 Ensure the KV v2 mount (default `apps`) exists before applying this module.

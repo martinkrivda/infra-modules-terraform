@@ -45,6 +45,23 @@ variable "admin_users" {
   }
 }
 
+variable "existing_admin_users" {
+  type        = map(object({
+    host  = optional(string)
+    scope = optional(string)
+  }))
+  description = "Admin users that already exist in MariaDB. The module will only apply grants + Vault secrets."
+  default     = {}
+
+  validation {
+    condition = alltrue([
+      for _, cfg in var.existing_admin_users :
+      contains(["database", "global"], coalesce(try(cfg.scope, null), "database"))
+    ])
+    error_message = "existing_admin_users.scope must be either 'database' or 'global'."
+  }
+}
+
 variable "admin_privileges" {
   type        = list(string)
   description = "Privileges granted to admin users."

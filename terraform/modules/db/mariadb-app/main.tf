@@ -27,8 +27,16 @@ locals {
     for name, cfg in var.admin_users : name => coalesce(try(cfg.host, null), "%")
   }
 
+  existing_admin_user_hosts = {
+    for name, cfg in var.existing_admin_users : name => coalesce(try(cfg.host, null), "%")
+  }
+
   admin_user_scopes = {
     for name, cfg in var.admin_users : name => coalesce(try(cfg.scope, null), "database")
+  }
+
+  existing_admin_user_scopes = {
+    for name, cfg in var.existing_admin_users : name => coalesce(try(cfg.scope, null), "database")
   }
 
   admin_passwords_provided = {
@@ -43,6 +51,11 @@ locals {
 
   admin_grant_database = {
     for name, scope in local.admin_user_scopes :
+    name => scope == "global" ? "*" : var.database_name
+  }
+
+  existing_admin_grant_database = {
+    for name, scope in local.existing_admin_user_scopes :
     name => scope == "global" ? "*" : var.database_name
   }
 

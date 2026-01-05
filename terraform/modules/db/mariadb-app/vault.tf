@@ -26,3 +26,18 @@ resource "vault_kv_secret_v2" "admin_users" {
     scope    = local.admin_user_scopes[each.key]
   })
 }
+
+resource "vault_kv_secret_v2" "existing_admin_users" {
+  for_each = var.existing_admin_users
+
+  mount = var.vault_mount
+  name  = "${local.admin_secret_prefix}/admins/${each.key}"
+
+  data_json = jsonencode({
+    username = each.key
+    database = local.existing_admin_grant_database[each.key]
+    host     = var.db_host
+    port     = var.db_port
+    scope    = local.existing_admin_user_scopes[each.key]
+  })
+}

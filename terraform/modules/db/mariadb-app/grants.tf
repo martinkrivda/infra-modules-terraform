@@ -15,3 +15,13 @@ resource "mysql_grant" "admins" {
   table      = "*"
   privileges = local.admin_privileges
 }
+
+resource "mysql_grant" "existing_admins" {
+  for_each = var.existing_admin_users
+
+  user       = each.key
+  host       = local.existing_admin_user_hosts[each.key]
+  database   = local.existing_admin_grant_database[each.key]
+  table      = "*"
+  privileges = local.admin_privileges
+}

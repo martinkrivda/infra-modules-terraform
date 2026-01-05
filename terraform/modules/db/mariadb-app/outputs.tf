@@ -19,6 +19,11 @@ output "admin_users" {
   value       = keys(var.admin_users)
 }
 
+output "existing_admin_users" {
+  description = "Admin users that already existed and only received grants."
+  value       = keys(var.existing_admin_users)
+}
+
 output "generated_admin_passwords" {
   description = "Generated admin passwords (only for users without provided password)."
   value       = local.generated_admin_passwords
@@ -32,5 +37,8 @@ output "vault_app_user_secret_path" {
 
 output "vault_admin_secret_paths" {
   description = "Vault KV v2 paths (relative to mount) for admin secrets."
-  value       = { for name, secret in vault_kv_secret_v2.admin_users : name => secret.name }
+  value = merge(
+    { for name, secret in vault_kv_secret_v2.admin_users : name => secret.name },
+    { for name, secret in vault_kv_secret_v2.existing_admin_users : name => secret.name }
+  )
 }
