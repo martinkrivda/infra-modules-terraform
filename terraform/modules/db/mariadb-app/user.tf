@@ -18,7 +18,7 @@ resource "random_password" "admin_users" {
 resource "mysql_user" "app" {
   user     = var.app_user_name
   host     = var.app_user_host
-  password = local.app_user_password
+  plaintext_password = local.app_user_password
 }
 
 resource "mysql_user" "admins" {
@@ -26,5 +26,5 @@ resource "mysql_user" "admins" {
 
   user     = each.key
   host     = local.admin_user_hosts[each.key]
-  password = local.admin_passwords[each.key]
+  plaintext_password = local.admin_passwords[each.key]
 }

@@ -1,6 +1,6 @@
 resource "vault_kv_secret_v2" "app_user" {
   mount = var.vault_mount
-  name  = "${local.app_secret_prefix}/users/${var.app_user_name}"
+  name  = "${local.app_secret_prefix}/databases/mariadb"
 
   data_json = jsonencode({
     username = var.app_user_name
@@ -15,7 +15,7 @@ resource "vault_kv_secret_v2" "admin_users" {
   for_each = var.admin_users
 
   mount = var.vault_mount
-  name  = "${local.admin_secret_prefix}/admins/${each.key}"
+  name  = "${local.admin_secret_prefix}/admins/mariadb/${each.key}"
 
   data_json = jsonencode({
     username = each.key
@@ -31,7 +31,7 @@ resource "vault_kv_secret_v2" "existing_admin_users" {
   for_each = var.existing_admin_users
 
   mount = var.vault_mount
-  name  = "${local.admin_secret_prefix}/admins/${each.key}"
+  name  = "${local.admin_secret_prefix}/admins/mariadb/${each.key}"
 
   data_json = jsonencode({
     username = each.key

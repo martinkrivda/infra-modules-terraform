@@ -24,7 +24,7 @@ module "kobchocen_api_db" {
 ```
 
 Vault storage:
-- App user secret path: `${vault_app_secret_prefix}/users/${app_user_name}`
-- Admin secret path: `${vault_admin_secret_prefix}/admins/<admin_user>`
+- App user secret path: `${vault_app_secret_prefix}/databases/postgres`
+- Admin secret path: `${vault_admin_secret_prefix}/admins/postgres/<admin_user>`
 
 Ensure the KV v2 mount (default `apps`) exists before applying this module.

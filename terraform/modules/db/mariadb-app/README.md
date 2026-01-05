@@ -8,6 +8,8 @@ module "kobchocen_api_db" {
 
   database_name = "kobchocen_api"
   app_user_name = "kobchocen_api"
+  database_character_set = "utf8mb4"
+  database_collation     = "utf8mb4_general_ci"
 
   environment = "dev"
   app_group   = "kobchocen"
@@ -24,12 +26,12 @@ module "kobchocen_api_db" {
 ```
 
 Vault storage:
-- App user secret path: `${vault_app_secret_prefix}/users/${app_user_name}`
-- Admin secret path: `${vault_admin_secret_prefix}/admins/<admin_user>`
+- App user secret path: `${vault_app_secret_prefix}/databases/mariadb`
+- Admin secret path: `${vault_admin_secret_prefix}/admins/mariadb/<admin_user>`
 
 Shared admin credentials:
 - Override `vault_admin_secret_prefix` (for example `kobchocen/shared`) and create the admin user only once (e.g. in `prod`).
-- This stores the admin secret at `apps/kobchocen/shared/admins/<admin_user>`.
+- This stores the admin secret at `apps/kobchocen/shared/admins/mariadb/<admin_user>`.
 
 Existing admin users:
 - Use `existing_admin_users` to apply grants without creating the user.

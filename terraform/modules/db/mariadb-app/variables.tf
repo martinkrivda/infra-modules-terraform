@@ -3,6 +3,18 @@ variable "database_name" {
   description = "MariaDB database name for the application."
 }
 
+variable "database_character_set" {
+  type        = string
+  description = "Default character set for the database."
+  default     = "utf8mb4"
+}
+
+variable "database_collation" {
+  type        = string
+  description = "Default collation for the database."
+  default     = "utf8mb4_general_ci"
+}
+
 variable "app_user_name" {
   type        = string
   description = "Application database username."
