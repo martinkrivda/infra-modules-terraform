@@ -61,10 +61,11 @@ locals {
   ssh_public_keys = var.ssh_public_keys != null ? var.ssh_public_keys : var.cloud_init.ssh_public_keys
 
   disk_defaults = {
-    type   = "scsi"
-    ssd    = true
-    cache  = "writeback"
-    backup = true
+    type    = "scsi"
+    ssd     = true
+    cache   = "writeback"
+    backup  = true
+    discard = false
   }
 
   os_disk_override = var.os_disk == null ? [] : [merge(
@@ -77,6 +78,7 @@ locals {
       ssd     = coalesce(try(var.os_disk.ssd, null), true)
       cache   = coalesce(try(var.os_disk.cache, null), "writeback")
       backup  = coalesce(try(var.os_disk.backup, null), true)
+      discard = coalesce(try(var.os_disk.discard, null), false)
     }
   )]
 
@@ -96,6 +98,7 @@ locals {
         ssd     = coalesce(try(disk.ssd, null), true)
         cache   = coalesce(try(disk.cache, null), "writeback")
         backup  = coalesce(try(disk.backup, null), true)
+        discard = coalesce(try(disk.discard, null), false)
       }
     )
   ]
@@ -149,6 +152,7 @@ resource "proxmox_vm_qemu" "vm" {
       slot    = format("%s%s", disk.value.type, disk.value.slot)
       cache   = disk.value.cache
       backup  = disk.value.backup
+      discard = disk.value.discard
     }
   }
 

@@ -164,6 +164,7 @@ variable "disks" {
     ssd     = optional(bool, true)
     cache   = optional(string, "writeback")
     backup  = optional(bool, true)
+    discard = optional(bool, false)
   }))
   default = [
     {
@@ -185,6 +186,7 @@ variable "os_disk" {
     ssd     = optional(bool, true)
     cache   = optional(string, "writeback")
     backup  = optional(bool, true)
+    discard = optional(bool, false)
   })
   default  = null
   nullable = true
@@ -200,6 +202,7 @@ variable "data_disks" {
     ssd     = optional(bool, true)
     cache   = optional(string, "writeback")
     backup  = optional(bool, true)
+    discard = optional(bool, false)
   }))
   default = []
 }
