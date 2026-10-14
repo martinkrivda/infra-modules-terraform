@@ -1,0 +1,46 @@
+name: Vault platform module
+
+on:
+  pull_request:
+    paths:
+      - terraform/modules/secrets/vault-platform/**
+      - terraform/examples/vault-platform/**
+      - .github/workflows/vault-platform.yml
+  push:
+    branches: [main]
+    paths:
+      - terraform/modules/secrets/vault-platform/**
+      - terraform/examples/vault-platform/**
+      - .github/workflows/vault-platform.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.15.2
+          terraform_wrapper: false
+      - name: Check module and example formatting
+        run: |
+          terraform fmt -check -recursive terraform/modules/secrets/vault-platform
+          terraform fmt -check -recursive terraform/examples/vault-platform
+      - name: Initialize module
+        working-directory: terraform/modules/secrets/vault-platform
+        run: terraform init -backend=false
+      - name: Validate module
+        working-directory: terraform/modules/secrets/vault-platform
+        run: terraform validate
+      - name: Test authorization and bootstrap with mock provider
+        working-directory: terraform/modules/secrets/vault-platform
+        run: terraform test
+      - name: Initialize example
+        working-directory: terraform/examples/vault-platform
+        run: terraform init -backend=false
+      - name: Validate example
+        working-directory: terraform/examples/vault-platform
+        run: terraform validate
