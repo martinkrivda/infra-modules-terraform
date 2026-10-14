@@ -42,7 +42,8 @@ Supporting files in the repo root (`Makefile`, `.tflint.hcl`, `.pre-commit-confi
 |          | `k8s/vault-helm` | Deploys HashiCorp Vault via Helm (HA optional, storage choice pluggable). |
 |          | `k8s/k3s-bootstrap` | Applies base manifests/CRDs/operators after fresh k3s install (Traefik config, Cloudflare Tunnel DaemonSet, etc.). |
 | Identity | `idp/keycloak-config` | Declares realms, clients, roles, and default users using the Keycloak Terraform provider. |
-| Secrets  | `secrets/vault-config` | Sets Vault auth methods, policies, and secrets engines for apps + platform services. |
+| Secrets  | `secrets/vault-config` | Configures KV mounts, policies and optional static secrets. |
+|          | `secrets/vault-platform` | Configures existing Vault KV v2, Kubernetes auth, optional OIDC and audit without storing secret values. |
 
 Each module includes its own README with usage, inputs, outputs, and examples.
 
@@ -110,3 +111,6 @@ Each module includes its own README with usage, inputs, outputs, and examples.
 5. **Observability** – Modules encourage adding Umami + Uptime Kuma via Argo CD projects with sealed secrets / Vault injectors.
 
 Use this repository as the foundation. Create per-environment repos that pin module versions, pass actual values, and supply backend configuration.
+
+For existing in-cluster Vault installations, see `terraform/examples/vault-platform`.
+Run `make test-vault` to validate its composition and execute mocked auth tests.
