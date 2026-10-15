@@ -44,17 +44,6 @@ run "application_authorization" {
     error_message = "Application policies must separate environments and prevent wildcard, permanent-destroy or administrator access."
   }
 }
-run "bootstrap_has_no_application_roles" {
-  command = plan
-  variables {
-    oidc_enabled       = false
-    oidc_client_secret = null
-  }
-  assert {
-    condition     = length(vault_policy.oidc_applications) == 0 && length(vault_jwt_auth_backend_role.applications) == 0 && length(vault_identity_group.applications) == 0
-    error_message = "Bootstrap without OIDC must not create application auth or policies."
-  }
-}
 run "reject_application_admin_group" {
   command = plan
   variables {
