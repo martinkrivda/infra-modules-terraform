@@ -79,3 +79,30 @@ checks. These tests do not prove actual Vault login or Kubernetes reachability.
 mount. `kubernetes_roles` maps roles to accounts, namespaces and policies.
 `oidc_path` is null when disabled; `oidc_redirect_uris` lists callback URIs.
 
+
+## Application-scoped OIDC access
+
+`oidc_application_access` maps login role names to an exact Keycloak group, a
+managed `kv_mount`, `secret_prefix`, explicit `secret_names`, and `access`
+(`read` or `manage`). It defaults to `{}` and creates no resources while OIDC
+is disabled. Existing administrator and workload resource addresses are unchanged.
+Each login role uses exact bound groups and the same issuer/client/callbacks;
+policies are assigned through an external identity group and matching alias.
+
+`read` permits selected KV v2 values and their metadata, plus listing names
+under the application prefix. `manage` adds create/update/patch, soft deletion
+of the current version and undelete. It never allows permanent destroy, deleting
+metadata/history, configuring mounts/auth/policies or reading another prefix.
+Listing parents is not granted; use a direct UI path for restricted users.
+
+Users select their role, e.g. `vault login -method=oidc role=app-prod-managers`.
+The existing default administrator role remains; it rejects users outside its
+admin group. Group memberships and Vault identity policies are additive: login
+role selection does not subtract policies granted through other groups. Never
+place a restricted user in a platform admin group. Existing entity policies and
+other auth methods must be audited separately. Secret fields within one KV
+object cannot have separate ACLs; split differently protected values into keys.
+
+Runtime workload identities remain independent of human OIDC groups. Changing
+a database secret does not rotate the live database credential, and existing
+encryption keys must be retained unless the application supports their rotation.

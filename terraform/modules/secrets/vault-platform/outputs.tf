@@ -26,3 +26,12 @@ output "kv_mounts" {
   description = "Sorted KV v2 mount names."
   value       = sort(keys(vault_mount.kv))
 }
+
+output "oidc_application_roles" {
+  description = "Application login roles, groups and policies, without credentials."
+  value = { for name, role in vault_jwt_auth_backend_role.applications : name => {
+    group_name = var.oidc_application_access[name].group_name
+    policies   = vault_identity_group.applications[name].policies
+    login_role = role.role_name
+  } }
+}

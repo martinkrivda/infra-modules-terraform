@@ -3,7 +3,7 @@ SHELL := /bin/bash
 ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 EXAMPLE_DIR ?= terraform/examples/platform
 
-.PHONY: fmt lint validate docs tools clean test-vault
+.PHONY: fmt lint validate docs tools clean test-vault test-keycloak
 
 fmt:
 	@echo "▶ Terraform fmt (recursive)"
@@ -38,3 +38,10 @@ test-vault:
 	terraform -chdir=terraform/modules/secrets/vault-platform test
 	terraform -chdir=terraform/examples/vault-platform init -backend=false
 	terraform -chdir=terraform/examples/vault-platform validate
+
+# Mocked realm tests; no live identity provider or administrator credentials.
+test-keycloak:
+	terraform fmt -check -recursive terraform/modules/idp/keycloak-realm
+	terraform -chdir=terraform/modules/idp/keycloak-realm init -backend=false
+	terraform -chdir=terraform/modules/idp/keycloak-realm validate
+	terraform -chdir=terraform/modules/idp/keycloak-realm test

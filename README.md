@@ -114,3 +114,12 @@ Use this repository as the foundation. Create per-environment repos that pin mod
 
 For existing in-cluster Vault installations, see `terraform/examples/vault-platform`.
 Run `make test-vault` to validate its composition and execute mocked auth tests.
+
+## Application SSO modules
+
+- `terraform/modules/idp/keycloak-realm`: single-realm interactive SSO, groups, users and secure clients.
+- `terraform/modules/secrets/vault-platform`: platform bootstrap plus optional application-scoped human OIDC policies.
+
+Keep environment group names, application secret paths and identities in consumer
+repositories. Publish a reviewed catalog commit and pin consumers to its SHA.
+See `terraform/examples/keycloak-realm`; run `make test-keycloak` and `make test-vault`.

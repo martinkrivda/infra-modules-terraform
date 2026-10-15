@@ -24,3 +24,10 @@ module "keycloak_realms" {
   }
 }
 ```
+
+## New single-realm SSO configurations
+
+Use [`idp/keycloak-realm`](../keycloak-realm) for new interactive SSO deployments.
+It uses the maintained keycloak/keycloak provider and strict callbacks, grants,
+group claims and realm security. This legacy multi-realm interface and its
+resource addresses remain unchanged; migration requires explicit state mapping.
