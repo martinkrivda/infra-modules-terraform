@@ -45,3 +45,18 @@ test-keycloak:
 	terraform -chdir=terraform/modules/idp/keycloak-realm init -backend=false
 	terraform -chdir=terraform/modules/idp/keycloak-realm validate
 	terraform -chdir=terraform/modules/idp/keycloak-realm test
+
+# Mocked Cloudflare tests never contact a live account.
+.PHONY: test-cloudflare
+test-cloudflare:
+	terraform fmt -check -recursive terraform/modules/dns/cloudflare-zones
+	terraform fmt -check -recursive terraform/modules/network/cloudflare-zero-trust
+	terraform fmt -check -recursive terraform/examples/cloudflare-adoption
+	terraform -chdir=terraform/modules/dns/cloudflare-zones init -backend=false
+	terraform -chdir=terraform/modules/dns/cloudflare-zones validate
+	terraform -chdir=terraform/modules/dns/cloudflare-zones test
+	terraform -chdir=terraform/modules/network/cloudflare-zero-trust init -backend=false
+	terraform -chdir=terraform/modules/network/cloudflare-zero-trust validate
+	terraform -chdir=terraform/modules/network/cloudflare-zero-trust test
+	terraform -chdir=terraform/examples/cloudflare-adoption init -backend=false
+	terraform -chdir=terraform/examples/cloudflare-adoption validate
