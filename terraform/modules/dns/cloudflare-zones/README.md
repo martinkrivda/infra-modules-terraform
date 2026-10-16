@@ -1,8 +1,10 @@
 # Cloudflare zone and DNS adoption
 
 Manage imported zones and DNS records with stable map keys. Credentials stay in
-the consuming root provider. Requires Terraform >= 1.7 and Cloudflare >= 5.14, < 6;
-pin an exact provider version in the consumer (the adoption example uses 5.14.0).
+the consuming root provider. Requires Terraform >= 1.7 and Cloudflare = 5.14.0,
+matching the consumer and adoption inventory schema. The mocked tests require
+Terraform >= 1.11: they resolve mock IDs during `plan` and never apply or destroy
+protected zones.
 
 ```hcl
 module "cloudflare_dns" {

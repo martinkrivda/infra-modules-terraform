@@ -6,4 +6,6 @@ Populate maps with exact remote configuration and import existing IDs before any
 apply. See the two module READMEs for shapes and import formats.
 
 Run `make test-cloudflare` from the catalog root for formatting, module validation,
-mocked adoption tests and example validation. Mocked tests never contact Cloudflare.
+mocked adoption tests and example validation, using Terraform >= 1.11. Mocked
+tests only plan, so protected resources never require teardown. No test contacts
+Cloudflare.

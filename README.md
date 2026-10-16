@@ -129,7 +129,7 @@ See `terraform/examples/keycloak-realm`; run `make test-keycloak` and `make test
 - `terraform/modules/dns/cloudflare-zones`: stable-key imported zones and full DNS records (structured data, settings and tags).
 - `terraform/modules/network/cloudflare-zero-trust`: imported cloudflared tunnels, origin settings, private routes, virtual networks and ordered Access policies.
 
-These modules use provider v5.14+ and Terraform 1.7+. See
+These modules use provider v5.14.0 and Terraform 1.7+ (mocked tests require 1.11+). See
 `terraform/examples/cloudflare-adoption` and run `make test-cloudflare` for validation
 and mocked tests without a live Cloudflare account. Consumers should pin a reviewed
 published commit and reconcile a no-op import plan before applying. Legacy

@@ -1,4 +1,17 @@
-mock_provider "cloudflare" {}
+# Resolve computed IDs during planning so reference assertions need no apply.
+mock_provider "cloudflare" {
+  override_during = plan
+
+  mock_resource "cloudflare_zero_trust_tunnel_cloudflared" {
+    defaults = { id = "11111111-1111-4111-8111-111111111111" }
+  }
+  mock_resource "cloudflare_zero_trust_tunnel_cloudflared_virtual_network" {
+    defaults = { id = "22222222-2222-4222-8222-222222222222" }
+  }
+  mock_resource "cloudflare_zero_trust_access_policy" {
+    defaults = { id = "33333333-3333-4333-8333-333333333333" }
+  }
+}
 
 variables {
   account_id = "00000000000000000000000000000000"
@@ -40,7 +53,7 @@ variables {
 }
 
 run "preserve_remote_configuration_and_policy_binding" {
-  command = apply
+  command = plan
 
   assert {
     condition     = cloudflare_zero_trust_tunnel_cloudflared_config.managed["ingress"].config.ingress[0].origin_request.access.required

@@ -1,4 +1,11 @@
-mock_provider "cloudflare" {}
+# Plan-only tests never create state that would require destroying protected zones.
+mock_provider "cloudflare" {
+  override_during = plan
+
+  mock_resource "cloudflare_zone" {
+    defaults = { id = "11111111111111111111111111111111" }
+  }
+}
 
 variables {
   account_id = "00000000000000000000000000000000"
@@ -19,7 +26,7 @@ variables {
 }
 
 run "preserve_structured_records_and_zone_reference" {
-  command = apply
+  command = plan
   assert {
     condition     = cloudflare_dns_record.managed["stable_id"].data.port == 443
     error_message = "Structured DNS data must be retained."

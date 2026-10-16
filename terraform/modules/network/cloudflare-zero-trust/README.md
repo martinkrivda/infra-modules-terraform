@@ -2,8 +2,10 @@
 
 Manage remotely configured cloudflared tunnels, full origin settings, private CIDR
 routes, virtual networks and Access applications/policies. The root supplies the
-Cloudflare provider and account ID. Requires Terraform >= 1.7, Cloudflare >= 5.14,
-< 6. Pin an exact provider in consumers; the adoption example uses 5.14.0.
+Cloudflare provider and account ID. Requires Terraform >= 1.7 and Cloudflare =
+5.14.0, matching the consumer and adoption inventory schema. The mocked tests
+require Terraform >= 1.11: they resolve mock IDs during `plan` and never apply or
+destroy protected tunnels or virtual networks.
 
 All maps default to empty. Keys are stable labels or existing UUIDs; `name` is an
 independent attribute so renaming an object does not change its Terraform address.
