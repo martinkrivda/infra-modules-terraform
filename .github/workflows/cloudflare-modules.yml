@@ -1,0 +1,30 @@
+name: Cloudflare modules
+
+on:
+  push:
+    paths:
+      - 'terraform/modules/dns/cloudflare-zones/**'
+      - 'terraform/modules/network/cloudflare-zero-trust/**'
+      - 'terraform/examples/cloudflare-adoption/**'
+      - '.github/workflows/cloudflare-modules.yml'
+      - 'Makefile'
+  pull_request:
+    paths:
+      - 'terraform/modules/dns/cloudflare-zones/**'
+      - 'terraform/modules/network/cloudflare-zero-trust/**'
+      - 'terraform/examples/cloudflare-adoption/**'
+      - '.github/workflows/cloudflare-modules.yml'
+      - 'Makefile'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.9.8'
+      - run: make test-cloudflare

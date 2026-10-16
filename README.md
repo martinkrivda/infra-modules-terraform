@@ -123,3 +123,15 @@ Run `make test-vault` to validate its composition and execute mocked auth tests.
 Keep environment group names, application secret paths and identities in consumer
 repositories. Publish a reviewed catalog commit and pin consumers to its SHA.
 See `terraform/examples/keycloak-realm`; run `make test-keycloak` and `make test-vault`.
+
+## Cloudflare adoption modules
+
+- `terraform/modules/dns/cloudflare-zones`: stable-key imported zones and full DNS records (structured data, settings and tags).
+- `terraform/modules/network/cloudflare-zero-trust`: imported cloudflared tunnels, origin settings, private routes, virtual networks and ordered Access policies.
+
+These modules use provider v5.14+ and Terraform 1.7+. See
+`terraform/examples/cloudflare-adoption` and run `make test-cloudflare` for validation
+and mocked tests without a live Cloudflare account. Consumers should pin a reviewed
+published commit and reconcile a no-op import plan before applying. Legacy
+`dns/cloudflare-records` remains a separate interface; its addresses do not migrate
+automatically to `dns/cloudflare-zones`.
